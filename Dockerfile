@@ -1,10 +1,10 @@
-FROM maven:3.8-openjdk-17 AS BUILD
+FROM maven:3.8-openjdk-17 AS build
 WORKDIR /app
 COPY . .
+RUN mvn clean package -DskipTests
 
-RUN mvn clean install - DskipTest
 FROM eclipse-temurin:17-jdk-jammy
 WORKDIR /app
-COPY --from=build /app/target/*.jar app.jar
+COPY --from=build /app/target/*.jar /app/app.jar
 EXPOSE 8083
-CMD ["java", "-jar", "/app/bff-agendador-tarefas.jar"]
+CMD ["java", "-jar", "/app/app.jar"]
